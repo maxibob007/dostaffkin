@@ -1,1 +1,12 @@
-<app-header />
+<div class="track-page">
+  <app-header></app-header>
+
+  <main class="track-content">
+    <h1>Отследить посылку</h1>
+
+    <form class="track-form" (ngSubmit)="trackShipment(trackNumber.value)">
+      <input #trackNumber type="text" placeholder="Введите номер посылки" />
+      <button type="submit">Отследить</button>
+    </form>
+  </main>
+</div>
