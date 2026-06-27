@@ -13,19 +13,19 @@
             <div class="main-fields">
                 <div class="main-field" id="fromField">
                     <div class="main-pin"></div>
-                    <input id="from" formControlName="from" placeholder="Откуда: начните вводить адрес"
+                    <input id="from" formControlName="from" [attr.desabled]="!!orderId()" placeholder="Откуда: начните вводить адрес"
                         autocomplete="off" />
                     <div class="main-ac" id="fromAc" role="listbox" aria-label="Подсказки адресов"></div>
                 </div>
 
                 <div class="main-field" id="toField">
                     <div class="main-pin"></div>
-                    <input id="to" formControlName="to" placeholder="Куда: начните вводить адрес" autocomplete="off" />
+                    <input id="to" formControlName="to" [attr.desabled]="!!orderId()" placeholder="Куда: начните вводить адрес" autocomplete="off" />
                     <div class="main-ac" id="toAc" role="listbox" aria-label="Подсказки адресов"></div>
                 </div>
             </div>
         </div>
-        <div class="main-package">
+        <div class="main-package" [style.display]="orderId() ? 'none' : null">
             <div class="main-block-title">Размер посылки</div>
 
             <div class="main-sizes">
@@ -45,7 +45,7 @@
 
             </div>
         </div>
-        <div class="main-speed">
+        <div class="main-speed" [style.display]="orderId() ? 'none' : null">
             <div class="main-block-title">Скорость доставки</div>
 
             <div class="main-speeds">
@@ -63,7 +63,7 @@
 
             </div>
         </div>
-        <div class="main-calculate-block">
+        <div class="main-calculate-block" [style.display]="orderId() ? 'none' : null">
             <button id="calc" class="button calculate-button" type="button" [disabled]="routeForm.invalid"
                 (click)="calculate()">Рассчитать</button>
         </div>
@@ -91,12 +91,11 @@
                     <div class="main-block-title">Контакты</div>
                     <div class="order-fields">
                         <div class="main-field">
-                            <input id="customeName" formControlName="name"="customerName" placeholder="Ваше имя"
-                                autocomplete="off" />
+                            <input id="customerName" formControlName="name" placeholder="Ваше имя" autocomplete="off" />
                         </div>
                         <div class="main-field">
-                            <input id="customerPhone" formControlName="[phone]"="customerPhone"
-                                placeholder="Ваш телефон" autocomplete="off" inputmode="tel" />
+                            <input id="customerPhone" formControlName="phone" placeholder="Ваш телефон"
+                                autocomplete="off" inputmode="tel" />
                         </div>
                     </div>
                 </div>
