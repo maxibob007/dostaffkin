@@ -7,6 +7,20 @@
         <div class="main-title">Оформление доставки</div>
         <div class="main-text">Выберите параметры для расчета отправления</div>
     </div>
+    @if (isCalculating()) {
+    <div class="main-loader-overlay" aria-live="polite" aria-label="Идет расчет">
+        <div class="main-loader">
+            <div class="main-loader-spinner"></div>
+        </div>
+    </div>
+    }
+    @if (isCalculating()) {
+    <div class="main-loader-overlay" aria-live="polite" aria-label="Идет расчет">
+        <div class="main-loader">
+            <div class="main-loader-spinner"></div>
+        </div>
+    </div>
+    }
     <div class="main-content">
         <div class="main-route" [formGroup]="routeForm">
             <div class="main-block-title">Маршрут</div>
@@ -65,10 +79,6 @@
                     <div class="main-speed-description">{{ speed.label }}</div>
                 </div>
                 }
-                <div class="main-speed-card" data-value="fast">
-                    <img class="main-speed-media" src="images/icons/fast.svg" alt="Fast" />
-                    <div class="main-speed-description">Приоритетная</div>
-                </div>
 
             </div>
         </div>

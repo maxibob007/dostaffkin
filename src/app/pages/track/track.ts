@@ -13,16 +13,42 @@ import { DeliveryApi } from '../../services/delivery-api';
 export class Track {
   trackId: string = '';
   trackResult = signal<any | null>(null);
-
-  // НОВОЕ: текстовое сообщение об ошибке или отсутствии отправления
   errorMessage = signal<string | null>(null);
+
+  private readonly statusIconMap: Record<string, string> = {
+    created: 'images/icons/created.svg',
+    'в обработке': 'images/icons/created.svg',
+    'создан': 'images/icons/created.svg',
+    'в пути': 'images/icons/in-way.svg',
+    'в дороге': 'images/icons/in-way.svg',
+    ready: 'images/icons/ready.svg',
+    'готово': 'images/icons/ready.svg',
+    'готов к выдаче': 'images/icons/ready.svg',
+    done: 'images/icons/done.svg',
+    'доставлен': 'images/icons/done.svg',
+    'доставлено': 'images/icons/done.svg',
+  };
 
   constructor(private deliveryApi: DeliveryApi) { }
 
+  getStatusIcon(status: any): string {
+    const candidates = [
+      status?.icon,
+      status?.type,
+      status?.key,
+      status?.code,
+      status?.label,
+    ].filter(Boolean) as string[];
+
+    const normalized = candidates
+      .map((value) => value.toString().trim().toLowerCase())
+      .find((value) => this.statusIconMap[value]);
+
+    return this.statusIconMap[normalized ?? ''] ?? 'images/icons/created.svg';
+  }
+
   trackShipment(): void {
     const rawValue = this.trackId;
-
-    // 1) Пустой ввод — показываем понятное сообщение
     if (!rawValue?.trim()) {
       this.errorMessage.set('Введите номер отправления');
       this.trackResult.set(null);
@@ -36,21 +62,16 @@ export class Track {
       return;
     }
 
-    // очищаем прошлые данные и сообщения
     this.trackResult.set(null);
     this.errorMessage.set(null);
-
     this.deliveryApi.getDeliveryInfo(numericValue).subscribe(
       (response) => {
-        // 2) Сервис вернул ошибку — «Отправление не найдено»
         if ('error' in response) {
-          // если учитель именно так формулировал:
           this.errorMessage.set('Отправление не найдено');
           this.trackResult.set(null);
           return;
         }
 
-        // 3) Всё хорошо — показываем результат
         this.trackResult.set(response);
       },
       (error) => {

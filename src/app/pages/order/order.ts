@@ -26,6 +26,7 @@ export class Order {
 
   public orderId: any = signal(null);
   public calculationResult: any = signal(null);
+  public isCalculating = signal(false);
 
   constructor(private formBuilder: FormBuilder, private deliveryApi: DeliveryApi) {
     this.routeForm = this.formBuilder.group({
@@ -42,7 +43,6 @@ export class Order {
     });
   }
 
-  // Инициализация карты и подсказок
   ngOnInit() {
     ymaps.ready(() => {
       this.map = new ymaps.Map('map', {
@@ -51,7 +51,6 @@ export class Order {
         controls: ['zoomControl'],
       });
 
-      // Подсказки адресов от Яндекса
       new ymaps.SuggestView('from').events.add('select', (event: any) =>
         this.routeForm.controls['from'].setValue(event.get('item')?.value ?? ''),
       );
@@ -61,23 +60,23 @@ export class Order {
     });
   }
 
-  // Выбор размера посылки
   public selectSize(size: string) {
     this.routeForm.controls['size'].setValue(size);
   }
 
-  // Выбор скорости доставки
   public selectSpeed(speed: string) {
     this.routeForm.controls['speed'].setValue(speed);
   }
 
-  // Расчёт маршрута и стоимости
   public calculate() {
     this.calculationResult.set(null);
+    this.isCalculating.set(false);
 
     if (!this.map || this.routeForm.invalid) {
       return;
     }
+
+    this.isCalculating.set(true);
 
     const { from, to, size, speed } = this.routeForm.getRawValue();
 
@@ -124,6 +123,7 @@ export class Order {
           total,
           speed,
         });
+        this.isCalculating.set(false);
       } catch (err) {
         this.failedCalculation();
       }
@@ -132,13 +132,12 @@ export class Order {
     this.mapRoute.model.events.add('requestfail', () => this.failedCalculation());
   }
 
-  // Обработка ошибки расчёта
   private failedCalculation() {
     this.calculationResult.set(null);
+    this.isCalculating.set(false);
     alert('Не удалось построить маршрут. Проверьте адреса и выбранные параметры.');
   }
 
-  // Отправка заявки
   public submitOrder() {
     const calculation = this.calculationResult();
     if (!calculation) {

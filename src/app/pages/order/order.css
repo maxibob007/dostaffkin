@@ -18,6 +18,7 @@
     flex-direction: column;
     overflow: hidden;
     z-index: 5;
+    position: relative;
 }
 
 .main-header {
@@ -114,6 +115,50 @@
     font-size: 12px;
     color: #7C7C7C;
     line-height: 1.2;
+}
+
+.main-calculate-block {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.main-loader-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(2px);
+    z-index: 15;
+}
+
+.main-loader {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(255, 140, 0, 0.14);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+}
+
+.main-loader-spinner {
+    width: 22px;
+    height: 22px;
+    border: 3px solid rgba(255, 140, 0, 0.25);
+    border-top-color: #ff8c00;
+    border-radius: 50%;
+    animation: main-loader-spin 0.8s linear infinite;
+}
+
+@keyframes main-loader-spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .main-result {

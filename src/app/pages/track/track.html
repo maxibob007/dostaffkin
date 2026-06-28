@@ -8,12 +8,10 @@
         <button type="submit">Отследить</button>
       </form>
 
-      <!-- НОВОЕ: сообщение об ошибке / отсутствии отправления -->
       <div *ngIf="errorMessage() as message" class="track-error">
         {{ message }}
       </div>
 
-      <!-- Результат трекинга, если он есть -->
       <div *ngIf="trackResult() as result" class="track-result">
         <div class="track-route">
           <div class="track-route-label">Маршрут:</div>
@@ -27,8 +25,11 @@
 
           <ul class="track-statuses-list">
             <li *ngFor="let status of result.statuses" class="track-status-item">
-              <div class="track-status-date">{{ status.date }}</div>
-              <div class="track-status-label">{{ status.label }}</div>
+              <img class="track-status-icon" [src]="getStatusIcon(status)" [alt]="status.label" />
+              <div class="track-status-text">
+                <div class="track-status-date">{{ status.date }}</div>
+                <div class="track-status-label">{{ status.label }}</div>
+              </div>
             </li>
           </ul>
         </div>
