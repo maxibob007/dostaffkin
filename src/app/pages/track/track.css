@@ -1,6 +1,6 @@
 .track-page {
   min-height: 100vh;
-  background-image: url('../home/images/main-image.png');
+  background-image: url('/images/track-bg.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -11,36 +11,40 @@
 .track-content {
   flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 120px 16px 32px; /* важно: большой верхний отступ */
+  padding: 120px 16px 32px;
   box-sizing: border-box;
-}
-}
-
-.track-content h1 {
-  margin-bottom: 24px;
-  font-size: 28px;
-  font-weight: 600;
 }
 
 .track-form {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 24px;
   background-color: #ffffff;
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 24px;
+  max-width: 360px;
+  width: 100%;
 }
 
+.track-form h1 {
+  margin: 0 0 16px 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.track-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* поле ввода */
 .track-form input {
   padding: 12px 16px;
   border-radius: 8px;
   border: 1px solid #d0d0d0;
-  min-width: 260px;
   font-size: 16px;
+  box-sizing: border-box;
 }
 
 .track-form button {
@@ -53,8 +57,15 @@
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  width: 100%;
 }
 
 .track-form button:hover {
   background-color: #ffdb33;
+}
+
+.track-error {
+  margin-top: 12px;
+  color: #d32f2f;
+  font-size: 14px;
 }

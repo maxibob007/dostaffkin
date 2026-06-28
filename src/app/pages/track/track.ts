@@ -1,40 +1,63 @@
 import { Component, signal } from '@angular/core';
-import { Header } from '../../header/header';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { DeliveryApi } from '../../services/delivery-api';
 
 @Component({
   selector: 'app-track',
   standalone: true,
-  imports: [Header],
+  imports: [CommonModule, FormsModule],
   templateUrl: './track.html',
   styleUrls: ['./track.css'],
 })
 export class Track {
+  trackId: string = '';
   trackResult = signal<any | null>(null);
 
-  constructor(private deliveryApi: DeliveryApi) {}
+  // НОВОЕ: текстовое сообщение об ошибке или отсутствии отправления
+  errorMessage = signal<string | null>(null);
 
-  trackShipment(rawValue: string): void {
+  constructor(private deliveryApi: DeliveryApi) { }
+
+  trackShipment(): void {
+    const rawValue = this.trackId;
+
+    // 1) Пустой ввод — показываем понятное сообщение
     if (!rawValue?.trim()) {
-      alert('Заполните номер отправления');
+      this.errorMessage.set('Введите номер отправления');
+      this.trackResult.set(null);
       return;
     }
-
-    this.trackResult.set(null);
 
     const numericValue = Number(rawValue);
     if (Number.isNaN(numericValue) || numericValue <= 0) {
-      alert('Введите корректный номер отправления');
+      this.errorMessage.set('Введите корректный номер отправления');
+      this.trackResult.set(null);
       return;
     }
 
-    this.deliveryApi.getDeliveryInfo(numericValue).subscribe((response) => {
-      if ('error' in response) {
-        alert(response.error);
-        return;
-      }
+    // очищаем прошлые данные и сообщения
+    this.trackResult.set(null);
+    this.errorMessage.set(null);
 
-      this.trackResult.set(response);
-    });
+    this.deliveryApi.getDeliveryInfo(numericValue).subscribe(
+      (response) => {
+        // 2) Сервис вернул ошибку — «Отправление не найдено»
+        if ('error' in response) {
+          // если учитель именно так формулировал:
+          this.errorMessage.set('Отправление не найдено');
+          this.trackResult.set(null);
+          return;
+        }
+
+        // 3) Всё хорошо — показываем результат
+        this.trackResult.set(response);
+      },
+      (error) => {
+        console.error('API error:', error);
+        this.errorMessage.set('Ошибка при запросе информации об отправлении');
+        this.trackResult.set(null);
+      }
+    );
   }
 }

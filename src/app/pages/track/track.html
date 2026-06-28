@@ -1,12 +1,38 @@
 <div class="track-page">
-  <app-header></app-header>
+  <div class="track-content">
+    <div class="track-form">
+      <h1>Отследить посылку</h1>
 
-  <main class="track-content">
-    <h1>Отследить посылку</h1>
+      <form (ngSubmit)="trackShipment()">
+        <input type="text" placeholder="Введите номер посылки" [(ngModel)]="trackId" name="trackId" />
+        <button type="submit">Отследить</button>
+      </form>
 
-    <form class="track-form" (ngSubmit)="trackShipment(trackNumber.value)">
-      <input #trackNumber type="text" placeholder="Введите номер посылки" />
-      <button type="submit">Отследить</button>
-    </form>
-  </main>
+      <!-- НОВОЕ: сообщение об ошибке / отсутствии отправления -->
+      <div *ngIf="errorMessage() as message" class="track-error">
+        {{ message }}
+      </div>
+
+      <!-- Результат трекинга, если он есть -->
+      <div *ngIf="trackResult() as result" class="track-result">
+        <div class="track-route">
+          <div class="track-route-label">Маршрут:</div>
+          <div class="track-route-value">
+            {{ result.route.from }} → {{ result.route.to }}
+          </div>
+        </div>
+
+        <div class="track-statuses">
+          <div class="track-statuses-title">Статусы доставки:</div>
+
+          <ul class="track-statuses-list">
+            <li *ngFor="let status of result.statuses" class="track-status-item">
+              <div class="track-status-date">{{ status.date }}</div>
+              <div class="track-status-label">{{ status.label }}</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

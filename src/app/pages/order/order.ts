@@ -24,10 +24,10 @@ export class Order {
   public routeForm: FormGroup;
   public orderForm: FormGroup;
 
-  public orderId = signal<number | null>(null);
-  public calculationResult = signal<any | null>(null);
+  public orderId: any = signal(null);
+  public calculationResult: any = signal(null);
 
-  constructor(private formBuilder: FormBuilder, private deliveryApi: DeliveryApi,) {
+  constructor(private formBuilder: FormBuilder, private deliveryApi: DeliveryApi) {
     this.routeForm = this.formBuilder.group({
       from: ['', Validators.required],
       to: ['', Validators.required],
